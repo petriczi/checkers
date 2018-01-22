@@ -1,6 +1,11 @@
 This is checkers game programming in C# and XAML. 
 It's only Alpha version for testing.
 Not all features and game rules working.
+
+<b>Important: </b>
+Don't run program after compile. Firstly copy <i>"/warcaby/files" </i> folder to <i> "/warcaby/bin/Debug" </i>
+
+
 GUI language: Polish. English will be in final version.
 <br />
 <center>
