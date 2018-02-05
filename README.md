@@ -1,5 +1,5 @@
 This is checkers game programming in C# and XAML. 
-It's only Alpha version for testing.
+It's only Beta version for testing.
 Not all features and game rules working.
 
 <b>Important: </b>
@@ -14,13 +14,11 @@ GUI language: Polish. English will be in final version.
 <br />
 
 Bugs:
-- Game is creating queen if you go to opponent area, but heven't programmed Queen function
-- showing numbers 1,2 and 0 on pawns and empty area in round window
-- Fatal error if user don't chceck checkbox and don't enter time or write litters in game window - first window after running game
+- Queen function not working perfectly
+- Some problem with entry data validation in first window
 - time ticking if opponent moved(after moved, time should be paused)
 
 To add:
 - Queen function
 - Language selector
-- veryfication for entering game time and bonus time
 - other game rules
