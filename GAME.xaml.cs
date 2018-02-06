@@ -49,6 +49,11 @@ namespace warcaby
             {
                 game_time = 0;
                 round_bonus = 0;
+                player1.create_name(p1_name_input.Text);//argument is name entered in game window
+                player2.create_name(p2_name_input.Text);
+                ROUND round = new ROUND(this.player1, this.player2, this.game_time, this.round_bonus);
+                this.Close();//closing first findow after run program
+                round.ShowDialog();//showing round window
             }
             else
             {
