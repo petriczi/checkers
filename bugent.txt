@@ -1,4 +1,0 @@
-1. Sytuacja do bicia lub s¹siadowanie z pionkiem przeciwnym. BUGEN: moge sie ruszyæ gdzie indziej a musze biæ !
-2. s¹siadowanie z pionkiem przeciwnym. BUGEN: moge sie ruszyæ o 2 pozycje do przoedu a powinienem o jedn¹
-3. Nie wpisanie czasu gry i bonusu/ BUGEN: wypierdala program
-4. Moge zbijaæ nawet w³asne pionki xD
