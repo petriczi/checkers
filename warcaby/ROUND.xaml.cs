@@ -25,14 +25,14 @@ namespace warcaby
 
     public partial class ROUND : Window
     {
+        
         int game_time, round_bonus;//max time for move by one player in minutes and value of bonus in seconds
         public static Button [,] round_table = new Button[8, 8]; //main table for pawns(buttons)
         public static Grid[] grid_contener = new Grid[1];// table for grid. Grid is defined in xaml file - ROUND.xaml.cs. Table for grid is for using grid beetwen *.cs files
         public static bool [] bonus_table = new bool[2];//table for checking who can get bonus
 
         WARCAB warcab = new WARCAB();
-        public bool isBonus_p2;
-        
+        public bool isBonus_p2;     
         public bool bonus_p2
         {
             get { return this.isBonus_p2; }
@@ -83,7 +83,7 @@ namespace warcaby
                     _time1 = _time1.Add(TimeSpan.FromSeconds(round_bonus)); bonus_table[0] = false;
                 }
                 else { _time1 = _time1.Add(TimeSpan.FromSeconds(-1)); }
-                _time1 = _time1.Add(TimeSpan.FromSeconds(-1));
+               
             }, Application.Current.Dispatcher);
 
             _timer1.Start();
@@ -95,8 +95,11 @@ namespace warcaby
             {
                 countdown_textBlock_p2.Text = _time2.ToString("c");
                 if (_time2 == TimeSpan.Zero) _timer2.Stop();
-                if (bonus_table[1] == true) {
-                    _time2 = _time2.Add(TimeSpan.FromSeconds(round_bonus)); bonus_table[1] = false;} else { _time2 = _time2.Add(TimeSpan.FromSeconds(-1)); }
+                if (bonus_table[1] == true)
+                {
+                    _time2 = _time2.Add(TimeSpan.FromSeconds(round_bonus)); bonus_table[1] = false;
+                }
+                else { _time2 = _time2.Add(TimeSpan.FromSeconds(-1)); }
             }, Application.Current.Dispatcher);
 
             _timer2.Start();           

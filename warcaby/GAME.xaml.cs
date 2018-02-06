@@ -38,8 +38,8 @@ namespace warcaby
         }
         private void no_time_limit_checkBox_unChecked(object sender, RoutedEventArgs e)//if user unclick checkbox in game window
         {
-            game_time_textbox.Text = "";
-            round_bonus_textbox.Text = "";
+            game_time_textbox.Text = "10";
+            round_bonus_textbox.Text = "10";
         }
 
         private void temp_TextChanged(object sender, TextChangedEventArgs e) { }
@@ -49,17 +49,34 @@ namespace warcaby
             {
                 game_time = 0;
                 round_bonus = 0;
+                player1.create_name(p1_name_input.Text);//argument is name entered in game window
+                player2.create_name(p2_name_input.Text);
+                ROUND round = new ROUND(this.player1, this.player2, this.game_time, this.round_bonus);
+                this.Close();//closing first findow after run program
+                round.ShowDialog();//showing round window
             }
             else
-            {               
-                game_time = int.Parse(game_time_textbox.Text);
-                round_bonus = int.Parse(round_bonus_textbox.Text);
+            {
+                string Str = game_time_textbox.Text.Trim();
+                double Num;
+                string Str2 = round_bonus_textbox.Text.Trim();
+                double Num2;
+                bool isNum = double.TryParse(Str, out Num);
+                bool isNum2 = double.TryParse(Str2, out Num2);
+                if (isNum && isNum2)
+                {
+                    game_time = int.Parse(game_time_textbox.Text);
+                    round_bonus = int.Parse(round_bonus_textbox.Text);
+                    player1.create_name(p1_name_input.Text);//argument is name entered in game window
+                    player2.create_name(p2_name_input.Text);
+                    ROUND round = new ROUND(this.player1, this.player2, this.game_time, this.round_bonus);
+                    this.Close();//closing first findow after run program
+                    round.ShowDialog();//showing round window
+                }
+                else
+                    MessageBox.Show("WPROWADŹ CYFRĘ     dałnie!");               
             }
-            player1.create_name(p1_name_input.Text);//argument is name entered in game window
-            player2.create_name(p2_name_input.Text);
-            ROUND round = new ROUND(this.player1,this.player2,this.game_time,this.round_bonus);
-            this.Close();//closing first findow after run program
-            round.ShowDialog();//showing round window
+           
             
         }
     }

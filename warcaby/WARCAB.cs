@@ -17,7 +17,36 @@ namespace warcaby
     public partial class WARCAB : Window
     {
         public static Button[] click_table = new Button[2];
-        int click_counter = 0;
+        private static int _click_counter = 0;
+        private static bool p1_was_moved = true;
+        private static bool p2_was_moved = false;
+        public static bool p1_moved
+        {
+            get { return p1_was_moved; }
+            set { p1_was_moved = value; }
+        }
+        public static bool p2_moved
+        {
+            get { return p2_was_moved; }
+            set { p2_was_moved = value; }
+        }
+
+        public static int click_counter
+        {
+            get
+            {
+                // Reads are usually simple
+                return _click_counter;
+            }
+            set
+            {
+                // You can add logic here for race conditions,
+                // or other measurements
+                _click_counter = value;
+            }
+        }
+
+
         Grid grid = new Grid();
 
         public WARCAB() { }  
@@ -211,8 +240,9 @@ namespace warcaby
                 button.Name = "button_" +i.ToString() + j.ToString();
                 button.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(p2_skin, UriKind.Relative)) };
                 button.BorderBrush = new SolidColorBrush(Colors.Transparent);
-                button.AddHandler(Button.ClickEvent, new RoutedEventHandler(Nbutton_Click));              
-               
+                button.AddHandler(Button.ClickEvent, new RoutedEventHandler(Nbutton_Click));
+                button.Foreground = new SolidColorBrush(Colors.Transparent);
+
             }
             if (player == 22)//queen second player
             {
@@ -224,6 +254,7 @@ namespace warcaby
                 button.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(p2_queen_skin, UriKind.Relative)) };
                 button.BorderBrush = new SolidColorBrush(Colors.Transparent);
                 button.AddHandler(Button.ClickEvent, new RoutedEventHandler(Nbutton_Click));
+                button.Foreground = new SolidColorBrush(Colors.Transparent);
 
             }
 
@@ -237,6 +268,7 @@ namespace warcaby
                 button.BorderBrush = new SolidColorBrush(Colors.Transparent);
                 button.AddHandler(Button.ClickEvent, new RoutedEventHandler(Nbutton_Click));
                 button.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(empty_area, UriKind.Relative)) };
+                button.Foreground= new SolidColorBrush(Colors.Transparent);
             }
             
             if (player==1)//first player
@@ -249,6 +281,7 @@ namespace warcaby
                 button.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(p1_skin, UriKind.Relative)) };
                 button.BorderBrush = new SolidColorBrush(Colors.Transparent);
                 button.AddHandler(Button.ClickEvent, new RoutedEventHandler(Nbutton_Click));
+                button.Foreground = new SolidColorBrush(Colors.Transparent);
             }
             if (player == 11)//queen first player
             {
@@ -260,12 +293,14 @@ namespace warcaby
                 button.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(p1_queen_skin, UriKind.Relative)) };
                 button.BorderBrush = new SolidColorBrush(Colors.Transparent);
                 button.AddHandler(Button.ClickEvent, new RoutedEventHandler(Nbutton_Click));
+                button.Foreground = new SolidColorBrush(Colors.Transparent);
             }
             return button;           
         }
         
         public void Nbutton_Click(object sender, EventArgs e)//main function for moving a pawn for one position to another position
         {
+            
             grid = ROUND.grid_contener[0];// table for grid. Grid is defined in xaml file - ROUND.xaml.cs. Table for grid is for using grid beetwen *.cs files
             click_counter++;
             if (click_counter == 1)//if player click on pawn
@@ -275,52 +310,84 @@ namespace warcaby
             }
             else//if player click second time for position to move
             {
-                Button tmp_button2 = sender as Button;
-                click_table[1] = tmp_button2;               
                 click_counter = 0;
-                string player_1_or_2 = click_table[0].Content.ToString();                
-                Thickness tmp_margin1 = WARCAB.click_table[0].Margin;
-                int i_position = int.Parse(click_table[0].Name.Substring(7, 1));// i,j- actual positon of pawn
-                int j_position = int.Parse(click_table[0].Name.Substring(8, 1));
-                int i_position_target = int.Parse(click_table[1].Name.Substring(7, 1));
-                int j_position_target = int.Parse(click_table[1].Name.Substring(8, 1));               
-
-                MOVE move = new MOVE();                
-                
-                if ((move.check_possibilities(i_position, j_position, i_position_target, j_position_target)) == false)//checking possibility to move
-                    MessageBox.Show("Popierdolony jesteś ?");//message if not
-                else if (fight(player_1_or_2, i_position, j_position, i_position_target, j_position_target) == true)//checking possibility to make a pawn
+                if ((p1_moved == true && p2_moved == false) && (click_table[0].Content.ToString()=="1" || click_table[0].Content.ToString() == "11"))
                 {
-                    swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);   //function to swap two pawns
-                    if (click_table[0].Content.ToString() == "2") ROUND.bonus_table[1] = true;//it gives X seconds bonus time, declarated before you run game
-                    if (click_table[0].Content.ToString() == "1") ROUND.bonus_table[0] = true;
+                    start_round(sender, click_counter);
+                    p1_moved = false;
+                    p2_moved = true;
                 }
-                else//if move is possible, but not making pawn
+                else if ((p1_moved == false && p2_moved == true) && (click_table[0].Content.ToString() == "2" || click_table[0].Content.ToString() == "22"))
                 {
-                    if ((move.find_neighbor(0,player_1_or_2, i_position, j_position, i_position_target, j_position_target) == true) //looking for pawn opponent  && zabezpieczenie przed przeskokiem o dwie pozycje
-                        && (move.empty_move(player_1_or_2, i_position, j_position, (i_position_target), (j_position_target)) == true))
-                    {
-                        swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);
-                        if (click_table[0].Content.ToString() == "2") ROUND.bonus_table[1] = true;
-                        if (click_table[0].Content.ToString() == "1") ROUND.bonus_table[0] = true;
-                    }
-                    else//empty move
-                    {
-                        if (move.empty_move(player_1_or_2, i_position, j_position, i_position_target, j_position_target) == true)//zabezpieczenie rzed robieniem kroku w tył
-                        {
-                            swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);//i robie pusty ruch
-                            if (click_table[0].Content.ToString() == "2")
-                                ROUND.bonus_table[1] = true;
-                            if (click_table[0].Content.ToString() == "1") ROUND.bonus_table[0] = true;
-                        }
-                        else
-                            MessageBox.Show("Popierdolony jesteś ?");
-                    }
+                    start_round(sender, click_counter);
+                    p1_moved = true;
+                    p2_moved = false;
                 }
-                move.queen_possibility();
+                else
+                    MessageBox.Show("Na chuj sie wpierdalasz kondomie jebany? Nie Twoja kolej");
             }
             
         }
+
+        public void start_round(object sender, int tmp_click_counter)
+        {
+            MOVE move = new MOVE();
+            Button tmp_button2 = sender as Button;
+            click_table[1] = tmp_button2;
+            click_counter = tmp_click_counter;
+            string player_1_or_2 = click_table[0].Content.ToString();
+            Thickness tmp_margin1 = WARCAB.click_table[0].Margin;
+            int i_position = int.Parse(click_table[0].Name.Substring(7, 1));// i,j- actual positon of pawn
+            int j_position = int.Parse(click_table[0].Name.Substring(8, 1));
+            int i_position_target = int.Parse(click_table[1].Name.Substring(7, 1));
+            int j_position_target = int.Parse(click_table[1].Name.Substring(8, 1));
+
+
+
+            if ((move.check_possibilities(i_position, j_position, i_position_target, j_position_target)) == false)//checking possibility to move
+                MessageBox.Show("Popierdolony jesteś ?");//message if not
+
+            else if
+                 (
+                  ((click_table[0].Content.ToString() != "11") && (click_table[0].Content.ToString() != "22"))
+                  && (fight(player_1_or_2, i_position, j_position, i_position_target, j_position_target, false) == true)
+                 )//checking possibility to make a pawn
+            {
+                swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);   //function to swap two pawns
+                if (click_table[0].Content.ToString() == "2") ROUND.bonus_table[1] = true;//it gives X seconds bonus time, declarated before you run game
+                if (click_table[0].Content.ToString() == "1") ROUND.bonus_table[0] = true;
+            }
+            else if ((click_table[0].Content.ToString() == "11") || (click_table[0].Content.ToString() == "22")) //if player 1 or 2 queen's move
+            {
+                fight(player_1_or_2, i_position, j_position, i_position_target, j_position_target, true);
+                swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);
+                click_counter = 0;
+            }
+            else//if move is possible, but not making pawn
+            {
+                if ((move.find_neighbor(0, player_1_or_2, i_position, j_position, i_position_target, j_position_target, false) == true) //looking for pawn opponent  && zabezpieczenie przed przeskokiem o dwie pozycje
+                    && (move.empty_move(player_1_or_2, i_position, j_position, (i_position_target), (j_position_target)) == true))
+                {
+                    swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);
+                    if (click_table[0].Content.ToString() == "2") ROUND.bonus_table[1] = true;
+                    if (click_table[0].Content.ToString() == "1") ROUND.bonus_table[0] = true;
+                }
+                else//empty move
+                {
+                    if (move.empty_move(player_1_or_2, i_position, j_position, i_position_target, j_position_target) == true)//zabezpieczenie rzed robieniem kroku w tył
+                    {
+                        swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);//i robie pusty ruch
+                        if (click_table[0].Content.ToString() == "2")
+                            ROUND.bonus_table[1] = true;
+                        if (click_table[0].Content.ToString() == "1") ROUND.bonus_table[0] = true;
+                    }
+                    else
+                        MessageBox.Show("Popierdolony jesteś ?");
+                }
+            }
+            move.queen_possibility();
+        }
+
         public void swap(Thickness tmp_margin1, int i_position, int j_position, int i_position_target, int j_position_target)//this function swaping your pawn with empty area
         {
             grid.Children.Remove(ROUND.round_table[i_position, j_position]);
@@ -338,73 +405,79 @@ namespace warcaby
             grid.Children.Add(ROUND.round_table[i_position, j_position]);
             grid.Children.Add(ROUND.round_table[i_position_target, j_position_target]);
         }
-        public bool fight(string player_1_or_2,int i_position, int j_position, int i_position_target, int j_position_target)// function for checking possibility to make pawn
+        public bool fight(string player_1_or_2,int i_position, int j_position, int i_position_target, int j_position_target,bool queen_move)// function for checking possibility to make pawn
         {
             bool fight = false;
             MOVE move = new MOVE();
+            int value_to_opponent = 0; 
+            if (queen_move != true)
+                value_to_opponent = 1;
+            else
+                value_to_opponent = (Math.Abs(i_position - i_position_target))-1;
+
             if ((i_position - 2 >= 0)  && (j_position + 2 <= 7))//right up
             {
                 if (
 
-                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position - 1, j_position + 1) == true) &&
-                    (move.find_neighbor(0, player_1_or_2, i_position - 2, j_position + 2, i_position - 1, j_position + 1) == true) &&
-                    ((i_position - 2 == i_position_target) && (j_position + 2 == j_position_target)))
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position - value_to_opponent, j_position + value_to_opponent, queen_move) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position - (value_to_opponent+1), j_position + (value_to_opponent + 1), i_position - 1, j_position + 1, queen_move) == true) &&
+                    ((i_position - (value_to_opponent + 1) == i_position_target) && (j_position + (value_to_opponent + 1) == j_position_target)))
                     && 
-                    (ROUND.round_table[i_position-1, j_position+1].Content.ToString()!="0")
+                    (ROUND.round_table[i_position- value_to_opponent, j_position+ value_to_opponent].Content.ToString()!="0")
                     )
                 {
                     fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position - 1, j_position + 1]);
-                    ROUND.round_table[i_position - 1, j_position + 1] = create_warcab(i_position - 1, j_position + 1, 0);
-                    grid.Children.Add(ROUND.round_table[i_position - 1, j_position + 1]);
+                    grid.Children.Remove(ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent]);
+                    ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent] = create_warcab(i_position - value_to_opponent, j_position + value_to_opponent, 0);
+                    grid.Children.Add(ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent]);
                 }
             }
             if ((i_position + 2 <= 7) && (j_position + 2 <= 7))//right down
             {
                 if (
-                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position + 1, j_position + 1) == true) &&
-                    (move.find_neighbor(0, player_1_or_2, i_position + 2, j_position + 2, i_position + 1, j_position + 1) == true) &&
-                    ((i_position + 2 == i_position_target) && (j_position + 2 == j_position_target)))
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position + value_to_opponent, j_position + value_to_opponent, queen_move) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position + (value_to_opponent+1), j_position + (value_to_opponent+1), i_position + 1, j_position + 1, queen_move) == true) &&
+                    ((i_position + (value_to_opponent+1) == i_position_target) && (j_position + (value_to_opponent+1) == j_position_target)))
                     &&
-                    (ROUND.round_table[i_position + 1, j_position + 1].Content.ToString() != "0")
+                    (ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent].Content.ToString() != "0")
                     )
                 {
                     fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position + 1, j_position + 1]);
-                    ROUND.round_table[i_position + 1, j_position + 1] = create_warcab(i_position + 1, j_position + 1, 0);
-                    grid.Children.Add(ROUND.round_table[i_position + 1, j_position + 1]);
+                    grid.Children.Remove(ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent]);
+                    ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent] = create_warcab(i_position + value_to_opponent, j_position + value_to_opponent, 0);
+                    grid.Children.Add(ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent]);
                 }
             }
             if ((i_position -2 <= 7) && (j_position - 2 <= 7))//left up
             {
                 if (
-                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position - 1, j_position - 1) == true) &&
-                    (move.find_neighbor(0, player_1_or_2, i_position - 2, j_position - 2, i_position - 1, j_position - 1) == true) &&
-                    ((i_position - 2 == i_position_target) && (j_position - 2 == j_position_target)))
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position - value_to_opponent, j_position - value_to_opponent, queen_move) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position - (value_to_opponent+1), j_position - (value_to_opponent+1), i_position - 1, j_position - 1, queen_move) == true) &&
+                    ((i_position - (value_to_opponent+1) == i_position_target) && (j_position - (value_to_opponent+1) == j_position_target)))
                     &&
-                    (ROUND.round_table[i_position - 1, j_position - 1].Content.ToString() != "0")
+                    (ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent].Content.ToString() != "0")
                     )
                 {
                     fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position - 1, j_position - 1]);
-                    ROUND.round_table[i_position - 1, j_position -1] = create_warcab(i_position - 1, j_position - 1, 0);
-                    grid.Children.Add(ROUND.round_table[i_position - 1, j_position - 1]);
+                    grid.Children.Remove(ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent]);
+                    ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent] = create_warcab(i_position - value_to_opponent, j_position - value_to_opponent, 0);
+                    grid.Children.Add(ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent]);
                 }
             }
             if ((i_position + 2 <= 7) && (j_position - 2 <= 7))//left up
             {
                 if (
-                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position + 1, j_position - 1) == true) &&
-                    (move.find_neighbor(0, player_1_or_2, i_position + 2, j_position - 2, i_position + 1, j_position - 1) == true) &&
-                    ((i_position + 2 == i_position_target) && (j_position - 2 == j_position_target)))
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position + value_to_opponent, j_position - value_to_opponent, queen_move) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position + (value_to_opponent+1), j_position - (value_to_opponent+1), i_position + 1, j_position - 1, queen_move) == true) &&
+                    ((i_position + (value_to_opponent+1) == i_position_target) && (j_position - (value_to_opponent+1) == j_position_target)))
                     &&
-                    (ROUND.round_table[i_position + 1, j_position - 1].Content.ToString() != "0")
+                    (ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent].Content.ToString() != "0")
                     )
                 {
                     fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position + 1, j_position - 1]);
-                    ROUND.round_table[i_position + 1, j_position - 1] = create_warcab(i_position + 1, j_position - 1, 0);
-                    grid.Children.Add(ROUND.round_table[i_position + 1, j_position - 1]);
+                    grid.Children.Remove(ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent]);
+                    ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent] = create_warcab(i_position + value_to_opponent, j_position - value_to_opponent, 0);
+                    grid.Children.Add(ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent]);
                 }
             }
             return fight;
