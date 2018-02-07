@@ -316,17 +316,44 @@ namespace warcaby
                     start_round(sender, click_counter);
                     p1_moved = false;
                     p2_moved = true;
+                    check_winner(1, "2", "22");
                 }
                 else if ((p1_moved == false && p2_moved == true) && (click_table[0].Content.ToString() == "2" || click_table[0].Content.ToString() == "22"))
                 {
                     start_round(sender, click_counter);
                     p1_moved = true;
                     p2_moved = false;
+                    check_winner(2, "1", "11");
                 }
                 else
                     MessageBox.Show("Na chuj sie wpierdalasz kondomie jebany? Nie Twoja kolej");
             }
             
+        }
+        public void check_winner(int who_player,string opponent_pawn, string opponent_queen)
+        {
+            int opponent_counter=0;
+            for(int i=0;i<=7;i++)
+            {
+                for (int j = 0; j <= 7; j++)
+                {
+                    if(ROUND.round_table[i, j] == null) { }
+                    else
+                        if ((ROUND.round_table[i, j].Content.ToString() == opponent_pawn) || (ROUND.round_table[i, j].Content.ToString() == opponent_queen))                        
+                        opponent_counter++;
+                        
+                }
+            }
+            if((opponent_counter==0) && (who_player==1))
+            {
+                MessageBox.Show("Czarne przegrały");
+                System.Windows.Application.Current.Shutdown();
+            }
+            else if ((opponent_counter == 0) && (who_player == 2))
+            {
+                MessageBox.Show("Białe przegrały");
+                System.Windows.Application.Current.Shutdown();
+            }
         }
 
         public void start_round(object sender, int tmp_click_counter)
