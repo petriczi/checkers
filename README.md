@@ -15,10 +15,9 @@ GUI language: Polish. English will be in final version.
 
 Bugs:
 - Queen function not working perfectly
-- Some problem with entry data validation in first window
+- Problem with multi making pawns
 - time ticking if opponent moved(after moved, time should be paused)
 
 To add:
-- Queen function
 - Language selector
 - other game rules
