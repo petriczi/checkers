@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Media;
+
 
 namespace warcaby
 {
@@ -27,6 +29,10 @@ namespace warcaby
         public GAME()
         {
             InitializeComponent();
+            using (var soundPlayer = new SoundPlayer(@"files/menu.wav"))
+            {
+                soundPlayer.Play();
+            }
         }
 
         private void game_time_textbox_TextChanged(object sender, TextChangedEventArgs e) { }
@@ -72,6 +78,7 @@ namespace warcaby
                     ROUND round = new ROUND(this.player1, this.player2, this.game_time, this.round_bonus);
                     this.Close();//closing first findow after run program
                     round.ShowDialog();//showing round window
+                  
                 }
                 else
                     MessageBox.Show("WPROWADŹ CYFRĘ     dałnie!");               

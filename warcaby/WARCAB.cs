@@ -311,22 +311,11 @@ namespace warcaby
             else//if player click second time for position to move
             {
                 click_counter = 0;
-                if ((p1_moved == true && p2_moved == false) && (click_table[0].Content.ToString()=="1" || click_table[0].Content.ToString() == "11"))
-                {
-                    start_round(sender, click_counter);
-                    p1_moved = false;
-                    p2_moved = true;
-                    check_winner(1, "2", "22");
-                }
-                else if ((p1_moved == false && p2_moved == true) && (click_table[0].Content.ToString() == "2" || click_table[0].Content.ToString() == "22"))
-                {
-                    start_round(sender, click_counter);
-                    p1_moved = true;
-                    p2_moved = false;
+               
+                    start_round(sender, click_counter);                    
+                    check_winner(1, "2", "22");               
                     check_winner(2, "1", "11");
-                }
-                else
-                    MessageBox.Show("Na chuj sie wpierdalasz kondomie jebany? Nie Twoja kolej");
+
             }
             
         }
@@ -383,6 +372,7 @@ namespace warcaby
                 swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);   //function to swap two pawns
                 if (click_table[0].Content.ToString() == "2") ROUND.bonus_table[1] = true;//it gives X seconds bonus time, declarated before you run game
                 if (click_table[0].Content.ToString() == "1") ROUND.bonus_table[0] = true;
+
             }
             else if ((click_table[0].Content.ToString() == "11") || (click_table[0].Content.ToString() == "22")) //if player 1 or 2 queen's move
             {
@@ -453,10 +443,15 @@ namespace warcaby
                     (ROUND.round_table[i_position- value_to_opponent, j_position+ value_to_opponent].Content.ToString()!="0")
                     )
                 {
-                    fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent]);
-                    ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent] = create_warcab(i_position - value_to_opponent, j_position + value_to_opponent, 0);
-                    grid.Children.Add(ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent]);
+                    if (click_table[0].Content.ToString() == ROUND.round_table[i_position - 1, j_position + 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        grid.Children.Remove(ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent]);
+                        ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent] = create_warcab(i_position - value_to_opponent, j_position + value_to_opponent, 0);
+                        grid.Children.Add(ROUND.round_table[i_position - value_to_opponent, j_position + value_to_opponent]);
+                    }
                 }
             }
             if ((i_position + 2 <= 7) && (j_position + 2 <= 7))//right down
@@ -469,10 +464,15 @@ namespace warcaby
                     (ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent].Content.ToString() != "0")
                     )
                 {
-                    fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent]);
-                    ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent] = create_warcab(i_position + value_to_opponent, j_position + value_to_opponent, 0);
-                    grid.Children.Add(ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent]);
+                    if (click_table[0].Content.ToString() == ROUND.round_table[i_position + 1, j_position + 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        grid.Children.Remove(ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent]);
+                        ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent] = create_warcab(i_position + value_to_opponent, j_position + value_to_opponent, 0);
+                        grid.Children.Add(ROUND.round_table[i_position + value_to_opponent, j_position + value_to_opponent]);
+                    }
                 }
             }
             if ((i_position -2 <= 7) && (j_position - 2 <= 7))//left up
@@ -485,10 +485,15 @@ namespace warcaby
                     (ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent].Content.ToString() != "0")
                     )
                 {
-                    fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent]);
-                    ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent] = create_warcab(i_position - value_to_opponent, j_position - value_to_opponent, 0);
-                    grid.Children.Add(ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent]);
+                    if (click_table[0].Content.ToString() == ROUND.round_table[i_position - 1, j_position - 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        grid.Children.Remove(ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent]);
+                        ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent] = create_warcab(i_position - value_to_opponent, j_position - value_to_opponent, 0);
+                        grid.Children.Add(ROUND.round_table[i_position - value_to_opponent, j_position - value_to_opponent]);
+                    }
                 }
             }
             if ((i_position + 2 <= 7) && (j_position - 2 <= 7))//left up
@@ -501,13 +506,20 @@ namespace warcaby
                     (ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent].Content.ToString() != "0")
                     )
                 {
-                    fight = true;
-                    grid.Children.Remove(ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent]);
-                    ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent] = create_warcab(i_position + value_to_opponent, j_position - value_to_opponent, 0);
-                    grid.Children.Add(ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent]);
+                    if (click_table[0].Content.ToString() == ROUND.round_table[i_position + 1, j_position - 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        grid.Children.Remove(ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent]);
+                        ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent] = create_warcab(i_position + value_to_opponent, j_position - value_to_opponent, 0);
+                        grid.Children.Add(ROUND.round_table[i_position + value_to_opponent, j_position - value_to_opponent]);
+                    }
                 }
             }
-            return fight;
+            
+
+                return fight;
 
         }
     }

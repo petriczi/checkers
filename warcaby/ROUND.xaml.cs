@@ -85,8 +85,12 @@ namespace warcaby
                 else { _time1 = _time1.Add(TimeSpan.FromSeconds(-1)); }
                
             }, Application.Current.Dispatcher);
-
             _timer1.Start();
+            if (WARCAB.p2_moved == false)
+                _timer1.Stop();
+ 
+
+            timer_rule();
         }
         public void player2_timer(int game_time)//timer for player2 displayed on round window
         {
@@ -101,8 +105,18 @@ namespace warcaby
                 }
                 else { _time2 = _time2.Add(TimeSpan.FromSeconds(-1)); }
             }, Application.Current.Dispatcher);
+            _timer2.Start();
+            if (WARCAB.p1_moved == false)
+                _timer2.Stop();
 
-            _timer2.Start();           
+            timer_rule();
+       
+
+        }
+        public void timer_rule()
+        {
+  
+
         }
         void dt_Tick(object sender, EventArgs e)//displaying game time in round window
         {            
