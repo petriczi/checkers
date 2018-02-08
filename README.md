@@ -20,5 +20,4 @@ Bugs:
 - time ticking if opponent moved(after moved, time should be paused)
 
 To add:
-- Language selector
 - other game rules
