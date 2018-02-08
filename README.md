@@ -6,10 +6,11 @@ Not all features and game rules working.
 Don't run program after compile. Firstly copy <i>"/warcaby/files" </i> folder to <i> "/warcaby/bin/Debug" </i>
 
 
-GUI language: Polish. English will be in final version.
+GUI language: Polish.
 <br />
 <center>
-<a href="https://imgbb.com/"><img src="https://image.ibb.co/bxbEc6/1.jpg" alt="1" border="0"></a>
+<img src="https://image.ibb.co/i4BMBH/01.jpg" alt="01" border="0"><br />
+<img src="https://image.ibb.co/mwi1BH/02.jpg" alt="02" border="0">
 </center>
 <br />
 
