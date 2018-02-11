@@ -53,18 +53,18 @@ namespace warcaby
                 if (queen_move != true)
                     value_to_opponent = 1;
                 else
-                    value_to_opponent = (Math.Abs(i_position - i_position_target)) - 1;
+                    value_to_opponent = Math.Abs((i_position - i_position_target) - 1);
 
                 if (((i_position_target - value_to_opponent) >= 0) && ((j_position_target + value_to_opponent) <= 7))
                     right_up = ROUND.round_table[i_position_target - value_to_opponent, j_position_target + value_to_opponent].Content.ToString(); //expected positions for neighbor
                 else
                     right_up = "0";
                 if (((i_position_target + value_to_opponent) <= 7) && ((j_position_target + value_to_opponent) <= 7))
-                    right_down = ROUND.round_table[i_position_target + 1, j_position_target + 1].Content.ToString();
+                    right_down = ROUND.round_table[i_position_target + value_to_opponent, j_position_target + value_to_opponent].Content.ToString();
                 else
                     right_down = "0";
                 if (((i_position_target - value_to_opponent) >= 0) && ((j_position_target - value_to_opponent) >= 0))
-                    left_up = ROUND.round_table[i_position_target - 1, j_position_target - 1].Content.ToString();
+                    left_up = ROUND.round_table[i_position_target - value_to_opponent, j_position_target - value_to_opponent].Content.ToString();
                 else
                     left_up = "0";
                 if (((i_position_target + value_to_opponent) <= 7) && ((j_position_target - value_to_opponent) >= 0))
