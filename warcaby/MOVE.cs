@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
+using System.Windows;
 namespace warcaby
 {
     class MOVE//class to checking possibilities to move
@@ -37,38 +37,34 @@ namespace warcaby
            return possible;
         }
 
-        public bool find_neighbor(int fight_first_validation,string player_1_or_2, int i_position, int j_position,int i_position_target, int j_position_target, bool queen_move)//szuka sąsiada do bicia
+        public bool find_neighbor(int fight_first_validation,string player_1_or_2, int i_position, int j_position,int i_position_target, int j_position_target)//szuka sąsiada do bicia
         {
             string right_up, right_down, left_up, left_down;
-            int value_to_opponent;
+
             bool neighbor = false;
             if ((i_position>=0) && (i_position<=7) &&(j_position>=0) &&(j_position<=7) && (i_position_target>=0) && (i_position_target<=7) &&(j_position_target>=0) && (j_position_target<=7))
             {
                 string actual_position = ROUND.round_table[i_position, j_position].Content.ToString();
-                if (fight_first_validation == 1)
+                if (fight_first_validation == 1)                
                     if (actual_position == "1")
                         actual_position = "2";
                     else
-                        actual_position = "1";
-                if (queen_move != true)
-                    value_to_opponent = 1;
-                else
-                    value_to_opponent = Math.Abs((i_position - i_position_target) - 1);
+                        actual_position = "1";               
 
-                if (((i_position_target - value_to_opponent) >= 0) && ((j_position_target + value_to_opponent) <= 7))
-                    right_up = ROUND.round_table[i_position_target - value_to_opponent, j_position_target + value_to_opponent].Content.ToString(); //expected positions for neighbor
+                if ((i_position_target - 1 >= 0) && ((j_position_target +1) <= 7))
+                    right_up = ROUND.round_table[i_position_target - 1, j_position_target + 1].Content.ToString(); //expected positions for neighbor
                 else
                     right_up = "0";
-                if (((i_position_target + value_to_opponent) <= 7) && ((j_position_target + value_to_opponent) <= 7))
-                    right_down = ROUND.round_table[i_position_target + value_to_opponent, j_position_target + value_to_opponent].Content.ToString();
+                if (((i_position_target + 1) <= 7) && ((j_position_target + 1) <= 7))
+                    right_down = ROUND.round_table[i_position_target + 1, j_position_target + 1].Content.ToString();
                 else
                     right_down = "0";
-                if (((i_position_target - value_to_opponent) >= 0) && ((j_position_target - value_to_opponent) >= 0))
-                    left_up = ROUND.round_table[i_position_target - value_to_opponent, j_position_target - value_to_opponent].Content.ToString();
+                if (((i_position_target - 1) >= 0) && ((j_position_target - 1) >= 0))
+                    left_up = ROUND.round_table[i_position_target - 1, j_position_target - 1].Content.ToString();
                 else
                     left_up = "0";
-                if (((i_position_target + value_to_opponent) <= 7) && ((j_position_target - value_to_opponent) >= 0))
-                    left_down = ROUND.round_table[i_position_target + value_to_opponent, j_position_target - value_to_opponent].Content.ToString();
+                if (((i_position_target + 1) <= 7) && ((j_position_target - 1) >= 0))
+                    left_down = ROUND.round_table[i_position_target + 1, j_position_target -1].Content.ToString();
                 else
                     left_down = "0";
                 if (((right_up != actual_position) && (right_up != "0")) || ((right_down != actual_position) && (right_down != "0")) || ((left_up != actual_position) && (left_up != "0")) || ((left_down != actual_position) && (left_down != "0")))//najpierw czy jest jakikolwiek sąsiad
@@ -117,6 +113,128 @@ namespace warcaby
                 a = a + 2;
             }
             ROUND.grid_contener[0] = grid;
+        }
+        public void queen_multi_move(int value_to_target, int i_position, int j_position, int  i_position_target, int j_position_target)
+        { 
+                if ((i_position < i_position_target) && (j_position < j_position_target)) //right down
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target - 1, j_position_target - 1]);
+                    ROUND.round_table[i_position_target - 1, j_position_target - 1] = warcab.create_warcab(i_position_target - 1, j_position_target - 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target - 1, j_position_target - 1]);
+                }
+                if ((i_position > i_position_target) && (j_position < j_position_target)) //right up
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target + 1, j_position_target - 1]);
+                    ROUND.round_table[i_position_target + 1, j_position_target - 1] = warcab.create_warcab(i_position_target + 1, j_position_target - 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target + 1, j_position_target - 1]);
+                }
+                if ((i_position > i_position_target) && (j_position > j_position_target)) //left up
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target + 1, j_position_target + 1]);
+                    ROUND.round_table[i_position_target + 1, j_position_target + 1] = warcab.create_warcab(i_position_target + 1, j_position_target + 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target + 1, j_position_target + 1]);
+                }
+                if ((i_position < i_position_target) && (j_position > j_position_target)) //left down
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target - 1, j_position_target + 1]);
+                    ROUND.round_table[i_position_target - 1, j_position_target + 1] = warcab.create_warcab(i_position_target - 1, j_position_target + 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target - 1, j_position_target + 1]);
+                }
+            
+        }
+        public bool fight(string player_1_or_2, int i_position, int j_position, int i_position_target, int j_position_target)// function for checking possibility to make pawn
+        {
+            bool fight = false;
+            MOVE move = new MOVE();         
+
+            if ((i_position - 2 >= 0) && (j_position + 2 <= 7))//right up
+            {
+                if (
+
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position - 1, j_position + 1) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position - 2, j_position + 2, i_position - 1, j_position + 1) == true) &&
+                    ((i_position - 2 == i_position_target) && (j_position + 2 == j_position_target)))
+                    &&
+                    (ROUND.round_table[i_position - 1, j_position +1].Content.ToString() != "0")
+                    )
+                {
+                    if (WARCAB.click_table[0].Content.ToString() == ROUND.round_table[i_position - 1, j_position + 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        grid.Children.Remove(ROUND.round_table[i_position - 1, j_position + 1]);
+                        ROUND.round_table[i_position - 1, j_position + 1] = warcab.create_warcab(i_position - 1, j_position + 1, 0);
+                        grid.Children.Add(ROUND.round_table[i_position - 1, j_position + 1]);
+                    }
+                }
+            }
+            if ((i_position + 2 <= 7) && (j_position + 2 <= 7))//right down
+            {
+                if (
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position + 1, j_position + 1) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position + 2, j_position + 2, i_position + 1, j_position + 1) == true) &&
+                    ((i_position + 2 == i_position_target) && (j_position + 2 == j_position_target)))
+                    &&
+                    (ROUND.round_table[i_position +1, j_position + 1].Content.ToString() != "0")
+                    )
+                {
+                    if (WARCAB.click_table[0].Content.ToString() == ROUND.round_table[i_position + 1, j_position + 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        
+                        grid.Children.Remove(ROUND.round_table[i_position + 1, j_position + 1]);
+                        ROUND.round_table[i_position + 1, j_position + 1] = warcab.create_warcab(i_position + 1, j_position + 1, 0);
+                        grid.Children.Add(ROUND.round_table[i_position + 1, j_position + 1]);
+                    }
+                }
+            }
+            if ((i_position - 2 <= 7) && (j_position - 2 <= 7))//left up
+            {
+                if (
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position - 1, j_position - 1) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position - 2, j_position - 2, i_position - 1, j_position - 1) == true) &&
+                    ((i_position - 2 == i_position_target) && (j_position - 2 == j_position_target)))
+                    &&
+                    (ROUND.round_table[i_position - 1, j_position - 1].Content.ToString() != "0")
+                    )
+                {
+                    if (WARCAB.click_table[0].Content.ToString() == ROUND.round_table[i_position - 1, j_position - 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        grid.Children.Remove(ROUND.round_table[i_position - 1, j_position - 1]);
+                        ROUND.round_table[i_position - 1, j_position - 1] = warcab.create_warcab(i_position - 1, j_position - 1, 0);
+                        grid.Children.Add(ROUND.round_table[i_position - 1, j_position - 1]);
+                    }
+                }
+            }
+            if ((i_position + 2 <= 7) && (j_position - 2 <= 7))//left up
+            {
+                if (
+                    ((move.find_neighbor(1, player_1_or_2, i_position, j_position, i_position + 1, j_position - 1) == true) &&
+                    (move.find_neighbor(0, player_1_or_2, i_position + 2, j_position - 2, i_position + 1, j_position - 1) == true) &&
+                    ((i_position + 2 == i_position_target) && (j_position - 2 == j_position_target)))
+                    &&
+                    (ROUND.round_table[i_position + 1, j_position - 1].Content.ToString() != "0")
+                    )
+                {
+                    if (WARCAB.click_table[0].Content.ToString() == ROUND.round_table[i_position + 1, j_position - 1].Content.ToString())
+                        fight = false;
+                    else
+                    {
+                        fight = true;
+                        grid.Children.Remove(ROUND.round_table[i_position + 1, j_position - 1]);
+                        ROUND.round_table[i_position + 1, j_position - 1] = warcab.create_warcab(i_position + 1, j_position - 1, 0);
+                        grid.Children.Add(ROUND.round_table[i_position + 1, j_position - 1]);
+                    }
+                }
+            }
+
+            return fight;
         }
     }
 }

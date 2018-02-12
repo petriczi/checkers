@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:warcaby"
         mc:Ignorable="d"
-        Title="round" Height="550" Width="446">
+        Title="round" Height="550" Width="433">
     <Grid x:Name="grid" Margin="10,10,0,0" HorizontalAlignment="Left" Width="420" Height="556" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="750*"/>
@@ -18,10 +18,10 @@
         <TextBlock x:Name="p2_show_name_textbox" HorizontalAlignment="Left" Margin="309,413,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" FontSize="20" Width="93" Height="27" RenderTransformOrigin="0.504,-0.741"/>
         <TextBlock HorizontalAlignment="Left" Margin="151,406,0,0" TextWrapping="Wrap" Text="Czas gry:" VerticalAlignment="Top" Height="40" Width="95" FontSize="24" RenderTransformOrigin="0.949,3.849"/>
         <TextBlock x:Name="timer_textBlock" HorizontalAlignment="Left" Margin="153,440,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="50" Width="93" FontSize="36"><Run Text="00:00"/></TextBlock>
-        <TextBlock x:Name="countdown_textBlock_p1" HorizontalAlignment="Left" Margin="0,436,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="76" FontSize="20" Text="00:00:00"/>
-        <TextBlock x:Name="countdown_textBlock_p2" HorizontalAlignment="Left" Margin="309,436,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="74" FontSize="20" RenderTransformOrigin="-1.646,0.639"><Run Text="00:00:00"/></TextBlock>
         <Image HorizontalAlignment="Left" Width="421" Source="files/table.png" Grid.ColumnSpan="5" Margin="0,0,-1,151"/>
         <TextBlock HorizontalAlignment="Left" Margin="246,467,0,0" TextWrapping="Wrap" Text="Sekund" VerticalAlignment="Top"/>
+        <Button x:Name="p1_resign" Content="Zrezygnuj" HorizontalAlignment="Left" Margin="0,452,0,0" VerticalAlignment="Top" Width="75" Click="p1_resign_Click"/>
+        <Button x:Name="p2_resign" Content="Zrezygnuj" HorizontalAlignment="Left" Margin="315,452,0,0" VerticalAlignment="Top" Width="75" Click="p2_resign_Click"/>
 
 
 

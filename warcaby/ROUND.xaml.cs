@@ -19,32 +19,21 @@ using System.Drawing;
 
 namespace warcaby
 {
-    /// <summary>
-    /// Interaction logic for round.xaml
-    /// </summary>
-
     public partial class ROUND : Window
-    {
-        
-        int game_time, round_bonus;//max time for move by one player in minutes and value of bonus in seconds
+    {       
+
         public static Button [,] round_table = new Button[8, 8]; //main table for pawns(buttons)
         public static Grid[] grid_contener = new Grid[1];// table for grid. Grid is defined in xaml file - ROUND.xaml.cs. Table for grid is for using grid beetwen *.cs files
-        public static bool [] bonus_table = new bool[2];//table for checking who can get bonus
-
         WARCAB warcab = new WARCAB();
-        public bool isBonus_p2;     
+        public bool isBonus_p2;   
         public bool bonus_p2
         {
             get { return this.isBonus_p2; }
             set { isBonus_p2 = value; }
         }
-        //timers fo player1, player2 and total game time
-        DispatcherTimer _timer1, _timer2;
-        TimeSpan _time1, _time2;
         DispatcherTimer dt = new DispatcherTimer();
         Stopwatch sw = new Stopwatch();
-        string currentTime = string.Empty;
-       
+        string currentTime = string.Empty;     
 
         public void bunus_test_Click(object sender, RoutedEventArgs e)//wyjebać potem to
         {
@@ -53,16 +42,11 @@ namespace warcaby
         public ROUND()
         {
         }
-        public ROUND(PLAYER player1, PLAYER player2, int Game_time, int Round_bonus)
+        public ROUND(PLAYER player1, PLAYER player2)
         {
             InitializeComponent();
             p1_show_name_textbox.Text = player1.p_name;//showing player 1 name declarated before you start round in game.cs, p1_show_name_textbox.Text- defined in game.xaml.cs
             p2_show_name_textbox.Text = player2.p_name;
-            game_time = Game_time;
-            round_bonus = Round_bonus;
-            player1_timer(game_time);
-            player2_timer(game_time);
-
             InitializeComponent();
             dt.Tick += new EventHandler(dt_Tick);
             dt.Interval = new TimeSpan(0, 0, 0, 0, 1);
@@ -71,53 +55,7 @@ namespace warcaby
             set_checker();
         }
 
-        public void player1_timer(int game_time)//timer for player1 displayed on round window
-        {
-            _time1 = TimeSpan.FromMinutes(game_time);            
-            _timer1 = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate
-            {
-                countdown_textBlock_p1.Text = _time1.ToString("c");
-                if (_time1 == TimeSpan.Zero) _timer1.Stop();
-                if (bonus_table[0] == true)
-                {
-                    _time1 = _time1.Add(TimeSpan.FromSeconds(round_bonus)); bonus_table[0] = false;
-                }
-                else { _time1 = _time1.Add(TimeSpan.FromSeconds(-1)); }
-               
-            }, Application.Current.Dispatcher);
-            _timer1.Start();
-            if (WARCAB.p2_moved == false)
-                _timer1.Stop();
- 
-
-            timer_rule();
-        }
-        public void player2_timer(int game_time)//timer for player2 displayed on round window
-        {
-            _time2 = TimeSpan.FromMinutes(game_time);
-            _timer2 = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate
-            {
-                countdown_textBlock_p2.Text = _time2.ToString("c");
-                if (_time2 == TimeSpan.Zero) _timer2.Stop();
-                if (bonus_table[1] == true)
-                {
-                    _time2 = _time2.Add(TimeSpan.FromSeconds(round_bonus)); bonus_table[1] = false;
-                }
-                else { _time2 = _time2.Add(TimeSpan.FromSeconds(-1)); }
-            }, Application.Current.Dispatcher);
-            _timer2.Start();
-            if (WARCAB.p1_moved == false)
-                _timer2.Stop();
-
-            timer_rule();
        
-
-        }
-        public void timer_rule()
-        {
-  
-
-        }
         void dt_Tick(object sender, EventArgs e)//displaying game time in round window
         {            
                 TimeSpan ts = sw.Elapsed;
@@ -198,7 +136,19 @@ namespace warcaby
             }
 
             grid_contener[0] = grid;//put grid to table to call to another class
-        }        
+        }
+
+        private void p1_resign_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Białe przegrały");
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void p2_resign_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Czarne przegrały");
+            System.Windows.Application.Current.Shutdown();
+        }
     }
 
 }
