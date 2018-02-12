@@ -376,8 +376,20 @@ namespace warcaby
             }
             else if ((click_table[0].Content.ToString() == "11") || (click_table[0].Content.ToString() == "22")) //if player 1 or 2 queen's move
             {
-                move.fight(player_1_or_2, i_position, j_position, i_position_target, j_position_target);
-                swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);
+                int value_to_target = Math.Abs(i_position_target - i_position);
+                if ((i_position == i_position_target) || (j_position == j_position_target))
+                    MessageBox.Show("Pojebało Cie?");
+                else if (value_to_target==2)
+                {
+                    move.fight(player_1_or_2, i_position, j_position, i_position_target, j_position_target);
+                    swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);
+                }
+                else
+                {
+                    move.queen_multi_move(value_to_target,i_position,j_position,i_position_target,j_position_target);
+                    swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);
+                }
+                
                 click_counter = 0;
             }
             else//if move is possible, but not making pawn

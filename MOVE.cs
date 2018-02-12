@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
+using System.Windows;
 namespace warcaby
 {
     class MOVE//class to checking possibilities to move
@@ -116,6 +116,36 @@ namespace warcaby
                 a = a + 2;
             }
             ROUND.grid_contener[0] = grid;
+        }
+        public void queen_multi_move(int value_to_target, int i_position, int j_position, int  i_position_target, int j_position_target)
+        {
+          
+           
+                if ((i_position < i_position_target) && (j_position < j_position_target)) //right down
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target - 1, j_position_target - 1]);
+                    ROUND.round_table[i_position_target - 1, j_position_target - 1] = warcab.create_warcab(i_position_target - 1, j_position_target - 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target - 1, j_position_target - 1]);
+                }
+                if ((i_position > i_position_target) && (j_position < j_position_target)) //right up
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target + 1, j_position_target - 1]);
+                    ROUND.round_table[i_position_target + 1, j_position_target - 1] = warcab.create_warcab(i_position_target + 1, j_position_target - 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target + 1, j_position_target - 1]);
+                }
+                if ((i_position > i_position_target) && (j_position > j_position_target)) //left up
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target + 1, j_position_target + 1]);
+                    ROUND.round_table[i_position_target + 1, j_position_target + 1] = warcab.create_warcab(i_position_target + 1, j_position_target + 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target + 1, j_position_target + 1]);
+                }
+                if ((i_position < i_position_target) && (j_position > j_position_target)) //left down
+                {
+                    grid.Children.Remove(ROUND.round_table[i_position_target - 1, j_position_target + 1]);
+                    ROUND.round_table[i_position_target - 1, j_position_target + 1] = warcab.create_warcab(i_position_target - 1, j_position_target + 1, 0);
+                    grid.Children.Add(ROUND.round_table[i_position_target - 1, j_position_target + 1]);
+                }
+            
         }
         public bool fight(string player_1_or_2, int i_position, int j_position, int i_position_target, int j_position_target)// function for checking possibility to make pawn
         {
