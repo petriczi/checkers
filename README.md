@@ -16,8 +16,9 @@ GUI language: Polish.
 
 Bugs:
 - insufficient number queen moves validation, cheats are possible :)
-- time ticking if opponent moved(after moved, time should be paused)
+
 
 To add in feature:
-- seperate GUI class
-- more comments and code style optimization
+- more comments
+- small game size (WAV to MP3 music in menu)
+- Disable button hover style
