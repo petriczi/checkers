@@ -15,9 +15,9 @@ GUI language: Polish.
 <br />
 
 Bugs:
-- Queen function not working perfectly
-- Problem with multi making pawns
+- insufficient number queen moves validation, cheats are possible :)
 - time ticking if opponent moved(after moved, time should be paused)
 
-To add:
-- other game rules
+To add in feature:
+- seperate GUI class
+- more comments and code style optimization
