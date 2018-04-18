@@ -35,7 +35,7 @@ namespace warcaby
         Stopwatch sw = new Stopwatch();
         string currentTime = string.Empty;     
 
-        public void bunus_test_Click(object sender, RoutedEventArgs e)//wyjebać potem to
+        public void bunus_test_Click(object sender, RoutedEventArgs e)
         {
             bonus_p2 = true;
         }
