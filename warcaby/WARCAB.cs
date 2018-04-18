@@ -305,7 +305,7 @@ namespace warcaby
             int i_position_target = int.Parse(click_table[1].Name.Substring(7, 1));
             int j_position_target = int.Parse(click_table[1].Name.Substring(8, 1));
             if ((move.check_possibilities(i_position, j_position, i_position_target, j_position_target)) == false)//checking possibility to move
-                MessageBox.Show("Popierdolony jesteś ?");//message if not
+                MessageBox.Show("Zły ruch");//message if not
             else if
                  (
                   ((click_table[0].Content.ToString() != "11") && (click_table[0].Content.ToString() != "22"))
@@ -346,7 +346,7 @@ namespace warcaby
                         swap(tmp_margin1, i_position, j_position, i_position_target, j_position_target);//i robie pusty ruch
                     }
                     else
-                        MessageBox.Show("Popierdolony jesteś ?");
+                        MessageBox.Show("Zly ruch");
                 }
             }
             move.queen_possibility();
